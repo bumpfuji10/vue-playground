@@ -1,18 +1,17 @@
 <!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title>TODO アプリ</title>
-  <link rel="stylesheet" href="style.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-</head>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>ToDo アプリ</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://unpkg.com/vue@3.0.0/dist/vue.global.js"></script>
+  </head>
   <body>
     <h1>ToDo アプリ</h1>
     <div id="app">
       <div class="new-todo">
         <div class="new-todo-item">
-          <label for="new-todo-item">タイトル</label>
+          <label for="new-todo-title">タイトル</label>
           <input
             v-model.trim="todoTitle"
             type="text"
@@ -33,13 +32,19 @@
           <ul>
             <li v-for="category in categories" :key="category">
               <label :for="'category-' + category">
-                <input v-model="todoCategories" type="checkbox" :id="'category-' + category" :value="category" form="form-todo" /> {{ category }}
+                <input
+                  v-model="todoCategories"
+                  type="checkbox"
+                  :id="'category-' + category"
+                  :value="category"
+                  form="form-todo"
+                />
+                {{ category }}
               </label>
             </li>
           </ul>
           <form @submit.prevent="createCategory">
             <input v-model.trim="categoryName" type="text" />
-            <!-- v-bindは:...というコロンから始まる省略形で書くことができる -->
             <button type="submit" :disabled="!canCreateCategory">作成</button>
           </form>
         </div>
@@ -53,13 +58,24 @@
         <div class="todo-search">
           <div class="todo-search-item">
             <label for="todo-search-category">カテゴリでフィルタ</label>
-            <select v-model="selectedCategory" id="todo-search-category" name="">
+            <select v-model="selectedCategory" id="todo-search-category">
               <option value="">指定なし</option>
-              <option v-for="category in categories" :key="category" :value="category">{{ category }}</option>
+              <option
+                v-for="category in categories"
+                :key="category"
+                :value="category"
+              >
+                {{ category }}
+              </option>
             </select>
-            <label for="todo-search-done">
-              終了したものを非表示にする<input v-model="hideDoneTodo" type="checkbox" id="todo-search-keyword" />
-            </label>
+          </div>
+          <div class="todo-search-item">
+            <label for="todo-search-done"
+              >終了したものを非表示にする<input
+                v-model="hideDoneTodo"
+                type="checkbox"
+                id="todo-search-done"
+            /></label>
           </div>
           <div class="todo-search-item">
             <select v-model="order">
@@ -69,13 +85,27 @@
           </div>
           <div class="todo-search-item">
             <label for="todo-search-keyword">キーワードで検索</label>
-            <input v-model.trim="searchWord" type="text" id="todo-search-keyword" />
+            <input
+              v-model.trim="searchWord"
+              type="text"
+              id="todo-search-keyword"
+            />
           </div>
         </div>
-        <ul v-if="hasTodos" class="todo-list">
-          <todo-item v-for="(todo, index) in resultTodos" :key="todo.id" :todo="todo" v-model:done="todo.done"></todo-item>
-        </ul>
-        <p v-else>Todoタスクはまだ登録されていません</p>
+        <transition-group
+          name="todo-list"
+          tag="ul"
+          v-if="hasTodos"
+          class="todo-list"
+        >
+          <todo-item
+            v-for="(todo, index) in resultTodos"
+            :key="todo.id"
+            :todo="todo"
+            v-model:done="todo.done"
+          ></todo-item>
+        </transition-group>
+        <p v-else>ToDoタスクはまだ登録されていません</p>
       </div>
     </div>
     <script type="text/x-template" id="template-todo-item">
@@ -88,10 +118,12 @@
           <h3 class="todo-item-title">{{ todo.title }}</h3>
           <div v-if="todo.description" class="todo-item-description">{{ todo.description }}</div>
           <ul class="todo-item-categories" v-if="hasCategories">
-            <li v-for="category in todo.categories" :key="category" class="todo-item-category">{{ category }}</li>
+          <li v-for="category in todo.categories" :key="category" class="todo-item-category"
+          >{{ category }}</li>
           </ul>
         </div>
       </li>
     </script>
+    <script src="app.js"></script>
   </body>
 </html>
