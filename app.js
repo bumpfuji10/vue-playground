@@ -1,4 +1,32 @@
+const todoItem = {
+  template: "#template-todo-item",
+  props: {
+    todo: {
+      type: Object,
+      required: true,
+    },
+    done: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  computed: {
+    hasCategories() {
+      console.log("hoge")
+      return this.todo.categories.length > 0
+    },
+  },
+  methods: {
+    onChangeTodo($event) {
+      this.$emit('update:done', $event.target.checked)
+    },
+  },
+}
+
 Vue.createApp({
+  components: {
+    'todo-item': todoItem,
+  },
   data: function() {
     return {
       todoTitle: "",
